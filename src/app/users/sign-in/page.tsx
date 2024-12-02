@@ -15,6 +15,14 @@ export default function SignInPage() {
       // toast.error('다시 시도해주세요')
     }
   };
+  const handleClickNaver = () => {
+    try {
+      signIn("naver", { callbackUrl: "/" });
+    } catch (e) {
+      console.log(e);
+      // toast.error('다시 시도해주세요')
+    }
+  };
 
   return (
     <div>
@@ -30,7 +38,14 @@ export default function SignInPage() {
           onClick={handleClickGoogle}
           className="relative border border-gray-700 rounded-md py-3 text-sm hover:bg-black/5 text-center font-semibold">
           {/*<FcGoogle className="absolute left-5 text-xl my-auto inset-y-0" />*/}
-          구글로 로그인하기
+          구글 로그인하기
+        </button>
+        <button
+          type="button"
+          onClick={handleClickNaver}
+          className="relative border border-gray-700 rounded-md py-3 text-sm hover:bg-black/5 text-center font-semibold bg-green-400">
+          {/*<FcGoogle className="absolute left-5 text-xl my-auto inset-y-0" />*/}
+          Naver 로그인하기
         </button>
       </div>
     </div>
