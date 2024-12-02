@@ -7,8 +7,9 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function SignInPage() {
-  const { status } = useSession();
+  const { status, data } = useSession();
   console.log("status: ", status);
+  console.log("data: ", data);
   const router = useRouter();
 
   const handleClickGoogle = () => {
