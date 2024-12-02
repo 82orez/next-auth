@@ -2,17 +2,21 @@
 
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function SignInPage() {
   const { status } = useSession();
   console.log("status: ", status);
+  const router = useRouter();
 
   const handleClickGoogle = () => {
     try {
       signIn("google", { callbackUrl: "/" });
     } catch (e) {
       console.log(e);
-      // toast.error('다시 시도해주세요')
+      toast.error("다시 시도해주세요");
     }
   };
   const handleClickNaver = () => {
@@ -20,10 +24,15 @@ export default function SignInPage() {
       signIn("naver", { callbackUrl: "/" });
     } catch (e) {
       console.log(e);
-      // toast.error('다시 시도해주세요')
+      toast.error("다시 시도해주세요");
     }
   };
-
+  useEffect(() => {
+    if (status === "authenticated") {
+      toast("Can't access");
+      router.replace("/");
+    }
+  }, [status, router]);
   return (
     <div>
       <div className="flex flex-col gap-6">
