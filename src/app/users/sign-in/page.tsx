@@ -28,6 +28,14 @@ export default function SignInPage() {
       toast.error("다시 시도해주세요");
     }
   };
+  const handleClickKakao = () => {
+    try {
+      signIn("kakao", { callbackUrl: "/" });
+    } catch (e) {
+      console.log(e);
+      toast.error("다시 시도해주세요");
+    }
+  };
   useEffect(() => {
     if (status === "authenticated") {
       toast("Can't access");
@@ -56,6 +64,13 @@ export default function SignInPage() {
           className="relative border border-gray-700 rounded-md py-3 text-sm hover:bg-black/5 text-center font-semibold bg-green-400">
           {/*<FcGoogle className="absolute left-5 text-xl my-auto inset-y-0" />*/}
           Naver 로그인하기
+        </button>
+        <button
+          type="button"
+          onClick={handleClickKakao}
+          className="relative border border-gray-700 rounded-md py-3 text-sm hover:bg-black/5 text-center font-semibold bg-yellow-300">
+          {/*<FcGoogle className="absolute left-5 text-xl my-auto inset-y-0" />*/}
+          Kakao 로그인하기
         </button>
       </div>
     </div>
