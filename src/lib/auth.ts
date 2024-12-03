@@ -41,5 +41,23 @@ export const authOptions: NextAuthOptions = {
         id: token.sub,
       },
     }),
+    signIn: async ({ account, profile }) => {
+      if (account?.provider && profile?.email) {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: profile.email },
+          include: { accounts: true },
+        });
+
+        if (existingUser) {
+          const isProviderLinked = existingUser.accounts.some((acc) => acc.provider === account.provider);
+
+          if (!isProviderLinked) {
+            // 동일 이메일이 다른 provider 로 이미 가입됨
+            return `/users/sign-in?error=alreadyLinked&provider=${existingUser.accounts[0].provider}`;
+          }
+        }
+      }
+      return true; // 로그인 허용
+    },
   },
 };
