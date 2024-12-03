@@ -43,12 +43,15 @@ export const authOptions: NextAuthOptions = {
     }),
     signIn: async ({ account, profile }) => {
       if (account?.provider && profile?.email) {
+        console.log("account: ", account);
+        console.log("profile: ", profile);
         const existingUser = await prisma.user.findUnique({
           where: { email: profile.email },
           include: { accounts: true },
         });
 
         if (existingUser) {
+          console.log("existingUser: ", existingUser);
           const isProviderLinked = existingUser.accounts.some((acc) => acc.provider === account.provider);
 
           if (!isProviderLinked) {

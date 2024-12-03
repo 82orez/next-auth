@@ -4,7 +4,6 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
 
 export default function SignInPage() {
   const { status, data } = useSession();
@@ -12,38 +11,33 @@ export default function SignInPage() {
   console.log("data: ", data);
   const router = useRouter();
 
-  const handleClickGoogle = () => {
-    try {
-      signIn("google", { callbackUrl: "/" });
-    } catch (e) {
-      console.log(e);
-      toast.error("다시 시도해주세요");
-    }
-  };
-  const handleClickNaver = () => {
-    try {
-      signIn("naver", { callbackUrl: "/" });
-    } catch (e) {
-      console.log(e);
-      toast.error("다시 시도해주세요");
-    }
-  };
-  const handleClickKakao = () => {
-    try {
-      signIn("kakao", { callbackUrl: "/" });
-    } catch (e) {
-      console.log(e);
-      toast.error("다시 시도해주세요");
-    }
-  };
+  // 이메일 중복 가입 방지를 위한 부분.
+  const params = new URLSearchParams(window.location.search) || "";
+  const error = params.get("error");
+  const provider = params.get("provider");
+
+  // 반드시 필요한 코드인지는 의문스러움.
   useEffect(() => {
     if (status === "authenticated") {
-      toast("Can't access");
       router.replace("/");
     }
   }, [status, router]);
+
+  const handleClickGoogle = async () => {
+    await signIn("google", { callbackUrl: "/" });
+  };
+  const handleClickNaver = async () => {
+    await signIn("naver", { callbackUrl: "/" });
+  };
+  const handleClickKakao = async () => {
+    await signIn("kakao", { callbackUrl: "/" });
+  };
+
   return (
     <div>
+      {error === "alreadyLinked" && provider && (
+        <div className="bg-red-100 text-red-800 p-4 rounded-md">이미 {provider} 로그인으로 가입하셨습니다. 해당 계정으로 로그인해주세요.</div>
+      )}
       <div className="flex flex-col gap-6">
         <Link href={"/"}>Move to Home</Link>
         <h1 className="text-lg font-semibold text-center">로그인 또는 회원가입</h1>
