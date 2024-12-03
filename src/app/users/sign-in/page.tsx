@@ -2,7 +2,7 @@
 
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
@@ -11,10 +11,18 @@ export default function SignInPage() {
   console.log("data: ", data);
   const router = useRouter();
 
-  // 이메일 중복 가입 방지를 위한 부분.
-  const params = new URLSearchParams(window.location.search) || "";
-  const error = params.get("error");
-  const provider = params.get("provider");
+  // 에러 및 provider 상태 관리
+  const [error, setError] = useState<null | string>(null);
+  const [provider, setProvider] = useState<null | string>(null);
+
+  useEffect(() => {
+    // 클라이언트에서만 실행
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      setError(params.get("error"));
+      setProvider(params.get("provider"));
+    }
+  }, []);
 
   // 반드시 필요한 코드인지는 의문스러움.
   useEffect(() => {
