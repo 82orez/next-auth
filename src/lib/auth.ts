@@ -42,11 +42,29 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     signIn: async ({ account, profile }) => {
-      if (account?.provider && profile?.email) {
-        console.log("account: ", account);
-        console.log("profile: ", profile);
+      console.log("account: ", account);
+      console.log("profile: ", profile);
+
+      // 이메일 중복 가입 방지를 위한 전체 흐름 요약:
+      // 1. 사용자가 로그인 시도를 하면 데이터베이스에서 동일 이메일을 가진 사용자가 있는지 확인.
+      // 1-1. 없으면 해당 이메일(소셜 제공자)로 회원 가입 및 로그인 진행
+      // 2. 사용자가 로그인하려는 소셜 제공자가 이미 연결된 상태라면 정상적으로 로그인 허용.
+      // 3. 사용자가 로그인하려는 소셜 제공자가 기존에 연결되지 않았다면, 이미 다른 소셜 제공자로 가입되어 있다는 메시지와 함께 로그인 제한.
+
+      let forCheckEmail = "";
+
+      if (account?.provider === "kakao") {
+        forCheckEmail = profile?.["kakao_account"]?.email; // 실제 카카오 프로필의 이메일 경로를 확인해야 함
+      } else if (account?.provider === "naver") {
+        forCheckEmail = profile?.["response"]?.email; // 실제 네이버 프로필의 이메일 경로를 확인해야 함
+      } else {
+        forCheckEmail = profile?.email || "";
+      }
+
+      // account?.provider && profile?.email
+      if (account?.provider && forCheckEmail) {
         const existingUser = await prisma.user.findUnique({
-          where: { email: profile.email },
+          where: { email: forCheckEmail },
           include: { accounts: true },
         });
 
