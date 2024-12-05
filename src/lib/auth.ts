@@ -51,6 +51,7 @@ export const authOptions: NextAuthOptions = {
       // 2. 사용자가 로그인하려는 소셜 제공자가 이미 연결된 상태라면 정상적으로 로그인 허용.
       // 3. 사용자가 로그인하려는 소셜 제공자가 기존에 연결되지 않았다면, 이미 다른 소셜 제공자로 가입되어 있다는 메시지와 함께 로그인 제한.
 
+      // 소셜 로그인 요청 시, 각 provider 들의 반환값(profile)의 형태가 서로 다르므로 email 을 조회하기 위해 하나의 형식으로 통일하기 위한 로직.
       let forCheckEmail = "";
 
       if (account?.provider === "kakao") {

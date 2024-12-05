@@ -6,30 +6,32 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignInPage() {
+  // * 클라이언트 컴포넌트에서 로그인 session 정보 가져오기 : useSession()
   const { status, data } = useSession();
   console.log("status: ", status);
   console.log("data: ", data);
   const router = useRouter();
 
-  // 에러 및 provider 상태 관리
+  // 로그인이 되어 있을 때 이 페이지로 접근하면 루트 페이지 '/'로 되돌림.
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/");
+    }
+  }, [status, router]);
+
+  // * 중복된 email 로 다른 소셜 로그인 인증을 시도했을 때 signIn 콜백 함수에서 반환한 에러 관련 메서지를 받아서 UI 기반 오류 메세지 출력.
+  // 콜백 함수에서 반환한 에러 관련 메서지를 처리하기 위한 상태 설정.
   const [error, setError] = useState<null | string>(null);
   const [provider, setProvider] = useState<null | string>(null);
 
   useEffect(() => {
-    // 클라이언트에서만 실행
+    // ? 오류 방지를 위해 아래 코드를 클라이언트 환경에서만 실행할 수 있도록 설정.
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       setError(params.get("error"));
       setProvider(params.get("provider"));
     }
   }, []);
-
-  // 반드시 필요한 코드인지는 의문스러움.
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.replace("/");
-    }
-  }, [status, router]);
 
   const handleClickGoogle = async () => {
     await signIn("google", { callbackUrl: "/" });
@@ -43,6 +45,7 @@ export default function SignInPage() {
 
   return (
     <div>
+      {/*UI 기반 오류 메세지 부분*/}
       {error === "alreadyLinked" && provider && (
         <div className="bg-red-100 text-red-800 p-4 rounded-md">이미 {provider} 로그인으로 가입하셨습니다. 해당 계정으로 로그인해주세요.</div>
       )}
