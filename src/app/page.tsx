@@ -1,26 +1,31 @@
-"use client";
+"use server";
+
 import Link from "next/link";
 import SignOut from "@/components/sign-out";
-import { useSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
-export default function Home() {
-  const { status, data } = useSession();
-  console.log("status: ", status);
-  console.log("data: ", data);
+export default async function Home() {
+  // const { status, data } = useSession();
+  // console.log("status: ", status);
+  // console.log("data: ", data);
+  const session = await getServerSession(authOptions);
+  console.log("session: ", session);
 
   return (
     <div className={"flex flex-col gap-5"}>
       <div>Homes</div>
-      {status === "authenticated" ? (
+      {session ? (
         <>
-          <div>{data?.user.email}</div>
-          <img src={data?.user.image} width={50} height={50} alt={data?.user.name} />
-          <div>{data?.expires}</div>
+          <div>{session?.user.email}</div>
+          <img src={session?.user.image} width={50} height={50} alt={session?.user.name} />
+          <div>{session?.expires}</div>
           <SignOut />
         </>
       ) : (
         <Link href={"/users/sign-in"}>Move to Sign In Page</Link>
       )}
+      <Link href={"/server-side-page"}>Move to Server Side Page</Link>
     </div>
   );
 }
