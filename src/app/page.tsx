@@ -26,6 +26,7 @@ export default async function Home() {
         <Link href={"/users/sign-in"}>Move to Sign In Page</Link>
       )}
       <Link href={"/server-side-page"}>Move to Server Side Page</Link>
+      <Link href={"/client-side-page"}>Move to Client Side Page</Link>
     </div>
   );
 }
