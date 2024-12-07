@@ -29,8 +29,11 @@ export const authOptions: NextAuthOptions = {
   pages: { signIn: "/users/sign-in" },
   callbacks: {
     jwt: async ({ user, token }) => {
+      console.log("user: ", user);
+      console.log("token: ", token);
+
       if (user) {
-        token.sub = user.id;
+        token = { ...token, ...user };
       }
       return token;
     },
@@ -38,20 +41,14 @@ export const authOptions: NextAuthOptions = {
       ...session,
       user: {
         ...session.user,
-        id: token.sub,
+        ...token,
       },
     }),
+
     signIn: async ({ account, profile }) => {
       console.log("account: ", account);
       console.log("profile: ", profile);
 
-      // 이메일 중복 가입 방지를 위한 전체 흐름 요약:
-      // 1. 사용자가 로그인 시도를 하면 데이터베이스에서 동일 이메일을 가진 사용자가 있는지 확인.
-      // 1-1. 없으면 해당 이메일(소셜 제공자)로 회원 가입 및 로그인 진행
-      // 2. 사용자가 로그인하려는 소셜 제공자가 이미 연결된 상태라면 정상적으로 로그인 허용.
-      // 3. 사용자가 로그인하려는 소셜 제공자가 기존에 연결되지 않았다면, 이미 다른 소셜 제공자로 가입되어 있다는 메시지와 함께 로그인 제한.
-
-      // 소셜 로그인 요청 시, 각 provider 들의 반환값(profile)의 형태가 서로 다르므로 email 을 조회하기 위해 하나의 형식으로 통일하기 위한 로직.
       let forCheckEmail = "";
 
       if (account?.provider === "kakao") {

@@ -9,8 +9,9 @@ export default function ClientSidePage() {
   console.log("data: ", data);
 
   return (
-    <div>
+    <div className={"flex flex-col gap-5"}>
       <div>ClientSidePage</div>
+      <div>Hello~ {data?.user.name}</div>
       <Link href={"/"}>To the Home</Link>
     </div>
   );
