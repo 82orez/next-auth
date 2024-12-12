@@ -65,7 +65,7 @@ export default function SignInPage() {
         <div className="text-xl md:text-2xl font-semibold">Fastcampus Nextbnb 에 오신 것을 환영합니다.</div>
       </div>
 
-      <div className="flex flex-col gap-5 mt-16 max-w-[320px] border-2 mx-auto">
+      <div className="flex flex-col gap-5 mt-16 max-w-[320px] mx-auto">
         <button
           type="button"
           onClick={handleClickGoogle}
@@ -88,7 +88,9 @@ export default function SignInPage() {
           onClick={handleClickNaver}
           className="border border-gray-700 rounded-md px-5 py-3 text-sm text-center font-semibold flex items-center "
           style={{ backgroundColor: "#02C759" }}>
-          <SiNaver className={"text-xl text-white"} />
+          <div className={"w-[20px] h-[20px] flex items-center justify-center"}>
+            <SiNaver className={"text-md text-white"} />
+          </div>
           <div className={"text-white grow"}>네이버 로그인</div>
         </button>
       </div>
