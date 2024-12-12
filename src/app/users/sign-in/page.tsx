@@ -4,6 +4,9 @@ import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { BiSolidMessageRounded } from "react-icons/bi";
+import { SiNaver } from "react-icons/si";
+import { FcGoogle } from "react-icons/fc";
 
 export default function SignInPage() {
   // * 클라이언트 컴포넌트에서 로그인 session 정보 가져오기 : useSession()
@@ -61,27 +64,32 @@ export default function SignInPage() {
         <hr className="border-b-gray-300" />
         <div className="text-xl md:text-2xl font-semibold">Fastcampus Nextbnb 에 오신 것을 환영합니다.</div>
       </div>
-      <div className="flex flex-col gap-5 mt-16">
+
+      <div className="flex flex-col gap-5 mt-16 max-w-[320px] border-2 mx-auto">
         <button
           type="button"
           onClick={handleClickGoogle}
-          className="relative border border-gray-700 rounded-md py-3 text-sm hover:bg-black/5 text-center font-semibold">
-          {/*<FcGoogle className="absolute left-5 text-xl my-auto inset-y-0" />*/}
-          구글 로그인하기
-        </button>
-        <button
-          type="button"
-          onClick={handleClickNaver}
-          className="relative border border-gray-700 rounded-md py-3 text-sm hover:bg-black/5 text-center font-semibold bg-green-400">
-          {/*<FcGoogle className="absolute left-5 text-xl my-auto inset-y-0" />*/}
-          Naver 로그인하기
+          className="border border-gray-700 rounded-md px-5 py-3 text-sm text-center font-semibold flex items-center ">
+          <FcGoogle className="text-xl" />
+          <div className={"grow"}>Google 로그인</div>
         </button>
         <button
           type="button"
           onClick={handleClickKakao}
-          className="relative border border-gray-700 rounded-md py-3 text-sm hover:bg-black/5 text-center font-semibold bg-yellow-300">
-          {/*<FcGoogle className="absolute left-5 text-xl my-auto inset-y-0" />*/}
-          Kakao 로그인하기
+          className="border border-gray-700 rounded-md px-5 py-3 text-sm text-center font-semibold flex items-center"
+          style={{ backgroundColor: "#FEE500" }}>
+          <BiSolidMessageRounded className={"text-xl"} />
+          <div className={"grow"} style={{ color: "rgba(0, 0, 0, 0.85)" }}>
+            카카오 로그인
+          </div>
+        </button>
+        <button
+          type="button"
+          onClick={handleClickNaver}
+          className="border border-gray-700 rounded-md px-5 py-3 text-sm text-center font-semibold flex items-center "
+          style={{ backgroundColor: "#02C759" }}>
+          <SiNaver className={"text-xl text-white"} />
+          <div className={"text-white grow"}>네이버 로그인</div>
         </button>
       </div>
     </div>
