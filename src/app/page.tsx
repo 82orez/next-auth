@@ -1,7 +1,7 @@
 "use server";
 
 import Link from "next/link";
-import SignOut from "@/components/sign-out";
+import SignOut from "@/components/SignOut";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
