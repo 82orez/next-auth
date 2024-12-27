@@ -2,10 +2,10 @@
 
 import { signOut } from "next-auth/react";
 
-export default function SignOut() {
+export default function SignOutButton() {
   return (
     <button
-      className={"bg-red-300 border-2 rounded-xl max-w-[120px] p-2"}
+      className={"max-w-[120px] rounded-xl border-2 bg-red-300 p-2"}
       onClick={() => {
         signOut();
       }}>

@@ -1,7 +1,7 @@
 "use server";
 
 import Link from "next/link";
-import SignOut from "@/components/SignOut";
+import SignOutButton from "@/components/SignOutButton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -20,7 +20,7 @@ export default async function Home() {
           <div>{session?.user?.email}</div>
           <img src={session?.user?.image || ""} width={50} height={50} alt={session?.user?.name || ""} />
           <div>{session?.expires}</div>
-          <SignOut />
+          <SignOutButton />
         </>
       ) : (
         <Link href={"/users/sign-in"}>Move to Sign In Page</Link>
