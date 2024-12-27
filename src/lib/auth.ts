@@ -45,10 +45,17 @@ export const authOptions: NextAuthOptions = {
       },
     }),
 
+    // * 소셜 로그인 시에 provider 로부터 { account, profile } 정보를 받아 온다.
+    // * 현재 로그인 시도 중인 소셜 로그인의 provider 정보는 account?.provider 에 담겨 있다.
+    // * 소셜 로그인 별로 가입한 이메일의 정보는 profile 에 확인할 수 있는데, 자세한 장소는 provider 마다 다르다.
+    // ? kakao : profile?.["kakao_account"]?.email
+    // ? naver : profile?.["response"]?.email
+    // ? google : profile?.email
     signIn: async ({ account, profile }) => {
       console.log("account: ", account);
       console.log("profile: ", profile);
 
+      // * provider 마다 다른 가입 email 정보를 하나로 통일해 주는 과정을 거친다.
       let forCheckEmail = "";
 
       if (account?.provider === "kakao") {
@@ -59,19 +66,22 @@ export const authOptions: NextAuthOptions = {
         forCheckEmail = profile?.email || "";
       }
 
-      // account?.provider && profile?.email
+      // * 사용자가 회원 가입 또는 로그인을 시도하면 데이터베이스에 동일 이메일을 가진 사용자가 존재하는지 확인하고, 없으면 해당 email 과 소셜 제공자로 회원 가입 및 로그인을 진행한다.
+      // * 하지만 동일한 email(forCheckEmail)을 소셜 로그인을 진행한 사용자가 이미 존재하면 그 정보를 DB 로부터 가져오는데, 이때 해당 사용자의 relation 된 accounts 정보도 함께 가져온다.
       if (account?.provider && forCheckEmail) {
         const existingUser = await prisma.user.findUnique({
           where: { email: forCheckEmail },
           include: { accounts: true },
         });
 
+        // * 위에서 가져온 정보를 토대로 기존 provider 정보와 현재 로그인 진행 중인 소셜 provider 가 일치할 경우 true 를 반환하고 로그인을 정상적으로 진행한다.
         if (existingUser) {
           console.log("existingUser: ", existingUser);
           const isProviderLinked = existingUser.accounts.some((acc) => acc.provider === account.provider);
 
+          // * 하지만 기존 provider 정보와 현재 로그인 진행 중인 소셜 provider 가 불일치할 경우에는 error 메세지와 관련된 경로를 반환한다.
           if (!isProviderLinked) {
-            // 동일 이메일이 다른 provider 로 이미 가입됨
+            // * 반환 경로에 주의: 반드시 로그인 페이지 경로로 수정해야 함.
             return `/users/sign-in?error=alreadyLinked&provider=${existingUser.accounts[0].provider}`;
           }
         }
