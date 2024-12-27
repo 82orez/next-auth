@@ -69,3 +69,9 @@ model VerificationToken {
 
   @@id([identifier, token])
 }
+
+model Test {
+  id   Int    @id @default(autoincrement())
+  name String
+  age  Int
+}
