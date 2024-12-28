@@ -40,12 +40,7 @@ export default function SignInPage() {
     await signIn("google", { callbackUrl: "/" });
   };
   const handleClickNaver = async () => {
-    try {
-      await signIn("naver", { callbackUrl: "/" });
-    } catch (error) {
-      console.error("네이버 로그인 실패: ", error);
-      setTimeout(() => signIn("naver", { callbackUrl: "/" }), 1000);
-    }
+    await signIn("naver", { callbackUrl: "/" });
   };
 
   const handleClickKakao = async () => {
@@ -60,9 +55,9 @@ export default function SignInPage() {
           이미 {provider} 로그인으로 가입하셨습니다. 해당 계정으로 로그인해주세요.
         </div>
       )}
-      {/*{error === "OAuthCallback" && (*/}
-      {/*  <div className="animate-pulse rounded-md bg-red-100 p-4 text-red-800">네트워크 오류입니다. 잠시 후 다시 시도해 주세요.</div>*/}
-      {/*)}*/}
+      {error === "OAuthCallback" && (
+        <div className="animate-pulse rounded-md bg-red-100 p-4 text-red-800">네트워크 오류입니다. 잠시 후 다시 시도해 주세요.</div>
+      )}
 
       <div className="flex flex-col gap-6">
         <Link href={"/"}>Move to Home</Link>
