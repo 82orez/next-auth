@@ -51,50 +51,58 @@ export default function SignInPage() {
     <div>
       {/*UI 기반 오류 메세지 부분*/}
       {error === "alreadyLinked" && provider && (
-        <div className="animate-pulse rounded-md bg-red-100 p-4 text-red-800">
-          이미 {provider} 로그인으로 가입하셨습니다. 해당 계정으로 로그인해주세요.
+        <div className="animate-pulse rounded-md bg-cyan-200 p-4 text-red-800">
+          이미 {provider} 계정으로 가입하셨습니다. {provider} 로 다시 로그인 해주세요.
         </div>
       )}
       {error === "OAuthCallback" && (
         <div className="animate-pulse rounded-md bg-red-100 p-4 text-red-800">네트워크 오류입니다. 잠시 후 다시 시도해 주세요.</div>
       )}
 
-      <div className="flex flex-col gap-6">
-        <Link href={"/"}>Move to Home</Link>
-        <h1 className="text-center text-lg font-semibold">로그인 또는 회원가입</h1>
-        <hr className="border-b-gray-300" />
-        <div className="text-xl font-semibold md:text-2xl">Fastcampus Nextbnb 에 오신 것을 환영합니다.</div>
-      </div>
+      {status === "loading" ? (
+        <div className={"flex h-screen items-center justify-center"}>
+          <div className={"animate-pulse text-4xl font-bold"}>Loading...</div>
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-col gap-6">
+            <Link href={"/"}>Move to Home</Link>
+            <h1 className="text-center text-lg font-semibold">로그인 또는 회원가입</h1>
+            <hr className="border-b-gray-300" />
+            <div className="text-xl font-semibold md:text-2xl">Fastcampus Nextbnb 에 오신 것을 환영합니다.</div>
+          </div>
 
-      <div className="mx-auto mt-16 flex max-w-[320px] flex-col gap-5">
-        <button
-          type="button"
-          onClick={handleClickGoogle}
-          className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold">
-          <FcGoogle className="text-xl" />
-          <div className={"grow"}>Google 로그인</div>
-        </button>
-        <button
-          type="button"
-          onClick={handleClickKakao}
-          className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold"
-          style={{ backgroundColor: "#FEE500" }}>
-          <BiSolidMessageRounded className={"text-xl"} />
-          <div className={"grow"} style={{ color: "rgba(0, 0, 0, 0.85)" }}>
-            카카오 로그인
+          <div className="mx-auto mt-16 flex max-w-[320px] flex-col gap-5">
+            <button
+              type="button"
+              onClick={handleClickGoogle}
+              className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold">
+              <FcGoogle className="text-xl" />
+              <div className={"grow"}>Google 로그인</div>
+            </button>
+            <button
+              type="button"
+              onClick={handleClickKakao}
+              className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold"
+              style={{ backgroundColor: "#FEE500" }}>
+              <BiSolidMessageRounded className={"text-xl"} />
+              <div className={"grow"} style={{ color: "rgba(0, 0, 0, 0.85)" }}>
+                카카오 로그인
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={handleClickNaver}
+              className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold"
+              style={{ backgroundColor: "#02C759" }}>
+              <div className={"flex h-[20px] w-[20px] items-center justify-center"}>
+                <SiNaver className={"text-md text-white"} />
+              </div>
+              <div className={"grow text-white"}>네이버 로그인</div>
+            </button>
           </div>
-        </button>
-        <button
-          type="button"
-          onClick={handleClickNaver}
-          className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold"
-          style={{ backgroundColor: "#02C759" }}>
-          <div className={"flex h-[20px] w-[20px] items-center justify-center"}>
-            <SiNaver className={"text-md text-white"} />
-          </div>
-          <div className={"grow text-white"}>네이버 로그인</div>
-        </button>
-      </div>
+        </>
+      )}
     </div>
   );
 }
