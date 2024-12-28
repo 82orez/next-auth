@@ -12,6 +12,7 @@ export default function ClientSidePage() {
     <div className={"flex flex-col gap-5"}>
       <div>ClientSidePage</div>
       <div>Hello~ {data?.user.name}</div>
+      <img src={data?.user?.image || ""} width={50} height={50} alt={data?.user?.name || ""} className={"rounded-full"} />
       <Link href={"/"}>To the Home</Link>
     </div>
   );

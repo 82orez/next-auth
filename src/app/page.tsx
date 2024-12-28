@@ -18,7 +18,7 @@ export default async function Home() {
       {session ? (
         <>
           <div>{session?.user?.email}</div>
-          <img src={session?.user?.image || ""} width={50} height={50} alt={session?.user?.name || ""} />
+          <img src={session?.user?.image || ""} width={50} height={50} alt={session?.user?.name || ""} className={"rounded-full"} />
           <div>{session?.expires}</div>
           <SignOutButton />
         </>
