@@ -82,7 +82,7 @@ export const authOptions: NextAuthOptions = {
           // * 하지만 기존 provider 정보와 현재 로그인 진행 중인 소셜 provider 가 불일치할 경우에는 error 메세지와 관련된 경로를 반환한다.
           if (!isProviderLinked) {
             // * 반환 경로에 주의: 반드시 로그인 페이지 경로로 수정해야 함.
-            return `/users/sign-in?error=alreadyLinked&provider=${existingUser.accounts[0].provider}`;
+            return `/users/sign-in?error=alreadyLinked&provider=${existingUser.accounts[0].provider}&email=${existingUser.email}`;
           }
         }
       }

@@ -27,12 +27,15 @@ export default function SignInPage() {
   const [error, setError] = useState<null | string>(null);
   const [provider, setProvider] = useState<null | string>(null);
 
+  const [email, setEmail] = useState<null | string>(null);
+
   useEffect(() => {
     // ? 오류 방지를 위해 아래 코드를 클라이언트 환경에서만 실행할 수 있도록 설정.
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       setError(params.get("error"));
       setProvider(params.get("provider"));
+      setEmail(params.get("email"));
     }
   }, []);
 
@@ -52,7 +55,8 @@ export default function SignInPage() {
       {/*UI 기반 오류 메세지 부분*/}
       {error === "alreadyLinked" && provider && (
         <div className="animate-pulse rounded-md bg-cyan-200 p-4 text-red-800">
-          이미 {provider} 계정으로 가입하셨습니다. {provider} 로 다시 로그인 해주세요.
+          회원님께서는 이미 <span className={"font-bold"}>{email}</span> 을 사용하여 <span className={"font-bold"}>{provider}</span> 계정으로
+          가입하셨습니다. <span className={"font-bold"}>{provider}</span> 로그인으로 다시 시도해주세요.
         </div>
       )}
       {error === "OAuthCallback" && (
