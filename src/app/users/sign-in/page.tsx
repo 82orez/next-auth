@@ -40,8 +40,14 @@ export default function SignInPage() {
     await signIn("google", { callbackUrl: "/" });
   };
   const handleClickNaver = async () => {
-    await signIn("naver", { callbackUrl: "/" });
+    try {
+      await signIn("naver", { callbackUrl: "/" });
+    } catch (error) {
+      console.error("네이버 로그인 실패: ", error);
+      setTimeout(() => signIn("naver", { callbackUrl: "/" }), 1000);
+    }
   };
+
   const handleClickKakao = async () => {
     await signIn("kakao", { callbackUrl: "/" });
   };
@@ -50,33 +56,33 @@ export default function SignInPage() {
     <div>
       {/*UI 기반 오류 메세지 부분*/}
       {error === "alreadyLinked" && provider && (
-        <div className="bg-red-100 text-red-800 p-4 rounded-md animate-pulse">
+        <div className="animate-pulse rounded-md bg-red-100 p-4 text-red-800">
           이미 {provider} 로그인으로 가입하셨습니다. 해당 계정으로 로그인해주세요.
         </div>
       )}
-      {error === "OAuthCallback" && (
-        <div className="bg-red-100 text-red-800 p-4 rounded-md animate-pulse">네트워크 오류입니다. 잠시 후 다시 시도해 주세요.</div>
-      )}
+      {/*{error === "OAuthCallback" && (*/}
+      {/*  <div className="animate-pulse rounded-md bg-red-100 p-4 text-red-800">네트워크 오류입니다. 잠시 후 다시 시도해 주세요.</div>*/}
+      {/*)}*/}
 
       <div className="flex flex-col gap-6">
         <Link href={"/"}>Move to Home</Link>
-        <h1 className="text-lg font-semibold text-center">로그인 또는 회원가입</h1>
+        <h1 className="text-center text-lg font-semibold">로그인 또는 회원가입</h1>
         <hr className="border-b-gray-300" />
-        <div className="text-xl md:text-2xl font-semibold">Fastcampus Nextbnb 에 오신 것을 환영합니다.</div>
+        <div className="text-xl font-semibold md:text-2xl">Fastcampus Nextbnb 에 오신 것을 환영합니다.</div>
       </div>
 
-      <div className="flex flex-col gap-5 mt-16 max-w-[320px] mx-auto">
+      <div className="mx-auto mt-16 flex max-w-[320px] flex-col gap-5">
         <button
           type="button"
           onClick={handleClickGoogle}
-          className="border border-gray-700 rounded-md px-5 py-3 text-sm text-center font-semibold flex items-center ">
+          className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold">
           <FcGoogle className="text-xl" />
           <div className={"grow"}>Google 로그인</div>
         </button>
         <button
           type="button"
           onClick={handleClickKakao}
-          className="border border-gray-700 rounded-md px-5 py-3 text-sm text-center font-semibold flex items-center"
+          className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold"
           style={{ backgroundColor: "#FEE500" }}>
           <BiSolidMessageRounded className={"text-xl"} />
           <div className={"grow"} style={{ color: "rgba(0, 0, 0, 0.85)" }}>
@@ -86,12 +92,12 @@ export default function SignInPage() {
         <button
           type="button"
           onClick={handleClickNaver}
-          className="border border-gray-700 rounded-md px-5 py-3 text-sm text-center font-semibold flex items-center "
+          className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold"
           style={{ backgroundColor: "#02C759" }}>
-          <div className={"w-[20px] h-[20px] flex items-center justify-center"}>
+          <div className={"flex h-[20px] w-[20px] items-center justify-center"}>
             <SiNaver className={"text-md text-white"} />
           </div>
-          <div className={"text-white grow"}>네이버 로그인</div>
+          <div className={"grow text-white"}>네이버 로그인</div>
         </button>
       </div>
     </div>
