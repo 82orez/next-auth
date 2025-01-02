@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { BiSolidMessageRounded } from "react-icons/bi";
 import { SiNaver } from "react-icons/si";
 import { FcGoogle } from "react-icons/fc";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function SignInPage() {
   // * 클라이언트 컴포넌트에서 로그인 session 정보 가져오기 : useSession()
@@ -39,15 +40,21 @@ export default function SignInPage() {
     }
   }, []);
 
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isKakaoLoading, setIsKakaoLoading] = useState(false);
+  const [isNaverLoading, setIsNaverLoading] = useState(false);
+
   const handleClickGoogle = async () => {
+    setIsGoogleLoading(true);
     await signIn("google", { callbackUrl: "/" });
   };
-  const handleClickNaver = async () => {
-    await signIn("naver", { callbackUrl: "/" });
-  };
-
   const handleClickKakao = async () => {
+    setIsKakaoLoading(true);
     await signIn("kakao", { callbackUrl: "/" });
+  };
+  const handleClickNaver = async () => {
+    setIsNaverLoading(true);
+    await signIn("naver", { callbackUrl: "/" });
   };
 
   return (
@@ -77,33 +84,53 @@ export default function SignInPage() {
           </div>
 
           <div className="mx-auto mt-16 flex max-w-[320px] flex-col gap-5">
-            <button
-              type="button"
-              onClick={handleClickGoogle}
-              className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold">
-              <FcGoogle className="text-xl" />
-              <div className={"grow"}>Google 로그인</div>
-            </button>
-            <button
-              type="button"
-              onClick={handleClickKakao}
-              className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold"
-              style={{ backgroundColor: "#FEE500" }}>
-              <BiSolidMessageRounded className={"text-xl"} />
-              <div className={"grow"} style={{ color: "rgba(0, 0, 0, 0.85)" }}>
-                카카오 로그인
+            {isGoogleLoading ? (
+              <div className={"flex items-center justify-center"}>
+                <AiOutlineLoading3Quarters className={"animate-spin"} />
               </div>
-            </button>
-            <button
-              type="button"
-              onClick={handleClickNaver}
-              className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold"
-              style={{ backgroundColor: "#02C759" }}>
-              <div className={"flex h-[20px] w-[20px] items-center justify-center"}>
-                <SiNaver className={"text-md text-white"} />
+            ) : (
+              <button
+                type="button"
+                onClick={handleClickGoogle}
+                className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold">
+                <FcGoogle className="text-xl" />
+                <div className={"grow"}>Google 로그인</div>
+              </button>
+            )}
+
+            {isKakaoLoading ? (
+              <div className={"flex items-center justify-center"}>
+                <AiOutlineLoading3Quarters className={"animate-spin"} />
               </div>
-              <div className={"grow text-white"}>네이버 로그인</div>
-            </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleClickKakao}
+                className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold"
+                style={{ backgroundColor: "#FEE500" }}>
+                <BiSolidMessageRounded className={"text-xl"} />
+                <div className={"grow"} style={{ color: "rgba(0, 0, 0, 0.85)" }}>
+                  카카오 로그인
+                </div>
+              </button>
+            )}
+
+            {isNaverLoading ? (
+              <div className={"flex items-center justify-center"}>
+                <AiOutlineLoading3Quarters className={"animate-spin"} />
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleClickNaver}
+                className="flex items-center rounded-md border border-gray-700 px-5 py-3 text-center text-sm font-semibold"
+                style={{ backgroundColor: "#02C759" }}>
+                <div className={"flex h-[20px] w-[20px] items-center justify-center"}>
+                  <SiNaver className={"text-md text-white"} />
+                </div>
+                <div className={"grow text-white"}>네이버 로그인</div>
+              </button>
+            )}
           </div>
         </>
       )}
